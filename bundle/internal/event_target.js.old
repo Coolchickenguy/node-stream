@@ -1,0 +1,5 @@
+//Patch
+//BOCK
+var primordials = require("./per_context/primordials.js");var process = require("./process.js");const kWeakHandler = Symbol('kWeak');
+const kResistStopPropagation = Symbol('kResistStopPropagation');
+module.exports = {kWeakHandler,kResistStopPropagation}

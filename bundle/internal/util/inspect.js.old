@@ -1,0 +1,3 @@
+//Patch
+//BOCK
+var primordials = require("../per_context/primordials.js");var process = require("../process.js");module.exports = {inspect : (v) => v}

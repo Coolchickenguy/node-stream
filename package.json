@@ -1,0 +1,32 @@
+{
+  "name": "stream",
+  "version": "1.0.0",
+  "description": "A the stream module from node",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coolchickenguy/node-stream.git"
+  },
+  "keywords": [
+    "Stream",
+    "Browser"
+  ],
+  "author": "Coolchickenguy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Coolchickenguy/node-stream/issues"
+  },
+  "homepage": "https://github.com/Coolchickenguy/node-stream#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "axios": "^1.7.2",
+    "eslint": "^9.5.0",
+    "globals": "^15.6.0",
+    "mkdirp": "^3.0.1",
+    "picomatch": "^4.0.2",
+    "yauzl-promise": "^4.0.0"
+  }
+}

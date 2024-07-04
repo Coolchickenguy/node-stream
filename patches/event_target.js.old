@@ -1,0 +1,3 @@
+const kWeakHandler = Symbol('kWeak');
+const kResistStopPropagation = Symbol('kResistStopPropagation');
+module.exports = {kWeakHandler,kResistStopPropagation}
