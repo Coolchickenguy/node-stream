@@ -50,7 +50,7 @@ const { destroyer } = require('./internal/streams/destroy');
 const eos = require('./internal/streams/end-of-stream');
 const internalBuffer = require('./internal/buffer');
 
-const promises = require('./bundle/stream/promises');
+const promises = require('./stream/promises');
 const utils = require('./internal/streams/utils');
 const { isArrayBufferView, isUint8Array } = require('./internal/util/types');
 
