@@ -66,7 +66,7 @@ finishedPromise.then(async () => {
     var primordailsLocation = getLoc("internal/per_context/primordials.js",filePath);
     var processLocation = getLoc("internal/process.js",filePath);
    console.log(`On path ${filePath}, primordials is at ${primordailsLocation} and process is at ${processLocation}`);
-   writeFileSync(filePath,`//Patch\n//BOCK\nvar primordials = require("${primordailsLocation}");var process = require("${processLocation}");` + readFileSync(filePath).toString().replace(/(?<=require\(")internal\/[^"]*(?="\))|(?<=require\(')internal\/[^']*(?='\))/g,(match) => {var out = (filePath.includes("/") ? relative(dirname(filePath),match) : match);out = out == "" ? relative(dirname(filePath),match + ".js") : out;return out.replace(/(?<!\.\/)(?<![A-z\/\.])(?=[A-z])/,"./")}).replace(/(?<=require\('|")events|stream\/.*(?='|"\))/gm,(match) => match == "events" ? getLoc("events.js",filePath) : getLoc(join("temp",match),filePath)));
+   writeFileSync(filePath,`//Patch\n//BOCK\nvar primordials = require("${primordailsLocation}");var process = require("${processLocation}");` + readFileSync(filePath).toString().replace(/(?<=require\(")internal\/[^"]*(?="\))|(?<=require\(')internal\/[^']*(?='\))/g,(match) => {var out = (filePath.includes("/") ? relative(dirname(filePath),match) : match);out = out == "" ? relative(dirname(filePath),match + ".js") : out;return out.replace(/(?<!\.\/)(?<![A-z\/\.])(?=[A-z])/,"./")}).replace(/(?<=require\('|")events|stream\/.*(?='|"\))/gm,(match) => match == "events" ? getLoc("events.js",filePath) : getLoc(join("bundle",match),filePath)));
   }
   console.log(files);
   const bundlePath = "../../../bundle";
