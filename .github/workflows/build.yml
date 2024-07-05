@@ -30,7 +30,7 @@ jobs:
         id: get_v
         uses: juliangruber/read-file-action@v1
         with:
-          path: "version.txt"
+          path: "./version.txt"
       - name: Create a release
         id: new_release
         uses: ncipollo/release-action@v1
