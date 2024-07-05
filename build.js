@@ -57,6 +57,7 @@ finishedPromise.then(async () => {
       }
     }
   }
+  console.log(readdirSync("./temp"),readdirSync("./temp").map(v => join("./temp",v)),readdirSync("./temp").map(v => join("./temp",v)).filter(v => statSync(v).isDirectory)[0])
   renameSync(readdirSync("./temp").map(v => join("./temp",v)).filter(v => statSync(v).isDirectory)[0])
   // Create patches
   for(var path of glob.readDir("./patches")){
