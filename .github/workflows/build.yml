@@ -28,7 +28,7 @@ jobs:
         run: npm pack --pack-destination out
       - name: Get version name
         id: get_v
-        uses: satya-500/read-file-github-action@v1
+        uses: juliangruber/read-file-action@v1
         with:
           path: "version.txt"
       - name: Create a release
