@@ -13,7 +13,8 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - latest
+          - 18
+          - 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,12 +29,12 @@ jobs:
       - run: npm test --if-present
       - name: Create a release
         id: new_release
-        uses: actions/create-release@v1
+        uses: comnoco/create-release-action@v2.0.5
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         with:
           tag_name: 'Nightly'
-          release_name: 'Release ${{ matrix.node-version }}'
+          release_name: 'Release nightly_${{ github.run_id }}'
           body: |
             A untested nightly release
             - For testing
