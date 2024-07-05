@@ -14,7 +14,7 @@ const {
 } = require('../internal/streams/utils');
 
 const { pipelineImpl: pl } = require('../internal/streams/pipeline');
-const { finished } = require('../internal/streams/end-./of-stream');
+const { finished } = require('../internal/streams/end-of-stream');
 
 require('stream');
 
