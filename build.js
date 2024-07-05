@@ -18,11 +18,22 @@ const yauzl = require("yauzl-promise"),
   picomatch = require("picomatch"),
   pathGlobs = require("./files.json");
 
+// Get token
+const token = process.argv[process.argv.findIndex(v => v == "--token" || v == "-T") + 1];
+// Get url of latest nodejs version
+axios({
+url:"https://api.github.com/repos/nodejs/node/releases",
+method:"get",
+headers: {
+  'Accept': 'application/vnd.github+json',
+  'Authorization': `Bearer ${token}`,
+  'X-GitHub-Api-Version': '2022-11-28'
+}}).then(res => {writeFileSync("./version.txt",res.data[0].tag_name);return res.data[0].zipball_url}).then(url => {
 // Create TEMP
 mkdirSync("./temp");
 var zipStream = createWriteStream("./temp/nodejs.zip");
 var finishedPromise = axios({
-  url: "https://codeload.github.com/nodejs/node/zip/refs/heads/main",
+  url: url,
   method: "GET",
   responseType: "stream",
 }).then(res => {res.data.pipe(zipStream); return finished(zipStream);});
@@ -74,4 +85,5 @@ finishedPromise.then(async () => {
   cpSync("./", bundlePath, {recursive: true});
   process.chdir(dirname(bundlePath));
   rmSync("./temp",{recursive:true});
+});
 });
