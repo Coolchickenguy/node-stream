@@ -35,9 +35,11 @@ function getPropsChainSafe(object, ...props) {
  * @returns { Function } A instanceof checker
  */
 const vISt =
-  (...types) =>
-  (val) =>
+  (...types) =>{
+    types.filter(v => typeof v != "undefined");
+  return (val) =>
     types.map((t) => val instanceof t).includes(true);
+  }
 const isEntirelyNative = (value) =>
   !getAllEntries(value)
     .map(([key, val]) =>
