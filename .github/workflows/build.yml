@@ -35,8 +35,8 @@ jobs:
         id: new_release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.read_file.outputs.contents }}"
-          name: "Release nightly_${{ steps.read_file.outputs.contents }}alpha"
+          tag: "${{ steps.get_v.outputs.contents }}"
+          name: "Release nightly_${{ steps.get_v.outputs.contents }}alpha"
           body: |
             A untested nightly release
             - For testing
