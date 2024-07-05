@@ -77,6 +77,9 @@ const isWeakMap = vISt(WeakMap);
 const isWeakSet = vISt(WeakSet);
 const isArrayBuffer = vISt(ArrayBuffer);
 const isDataView = vISt(DataView);
+if(typeof SharedArrayBuffer){
+  var SharedArrayBuffer = undefined;
+}
 const isSharedArrayBuffer = vISt(SharedArrayBuffer);
 const isProxy = (val) =>
   typeof getPropsChainSafe(val, getProxyDetailsSymbol) !== undefined;
