@@ -32,8 +32,8 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
         with:
-          tag_name: '${{ github.ref }}'
-          release_name: 'Release ${{ github.ref }}'
+          tag_name: 'Nightly'
+          release_name: 'Release ${{ matrix.node-version }}'
           body: |
             A untested nightly release
             - For testing
