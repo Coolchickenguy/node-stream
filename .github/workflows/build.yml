@@ -20,7 +20,7 @@ jobs:
           node-version: '20'
           cache: npm
       - run: npm ci
-      - run: npm run build --if-present -- --token ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run build --if-present -- --token ${{ secrets.GITHUB_TOKEN }} 
       - run: npm test --if-present
       - name: Create out dir
         run: mkdir out
