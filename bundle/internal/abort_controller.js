@@ -57,7 +57,7 @@ const {
 const {
   clearTimeout,
   setTimeout,
-} = require('timers');
+} = require('./timers.js');
 const assert = require('./assert');
 
 const {
