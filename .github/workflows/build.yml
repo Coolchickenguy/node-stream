@@ -44,4 +44,4 @@ jobs:
             - For testing
           prerelease: true
           skipIfReleaseExists: true
-          artifacts: "out/**"
+          artifacts: "out/*"
