@@ -7,7 +7,10 @@ const yauzl = require("yauzl-promise"),
     existsSync,
     mkdirSync,
     rmSync,
+    renameSync,
     cpSync,
+    readdirSync,
+    statSync,
   } = require("fs"),
   stream = require("stream"),
   { join, relative,dirname } = require("path"),
@@ -54,6 +57,7 @@ finishedPromise.then(async () => {
       }
     }
   }
+  renameSync(join("./temp",readdirSync("./temp").filter(v => statSync(v).isDirectory)[0]),"./temp/node-main")
   // Create patches
   for(var path of glob.readDir("./patches")){
     if(!existsSync(dirname(join("./temp/node-main/lib/internal",path)))){
