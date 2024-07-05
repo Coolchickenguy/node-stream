@@ -1,5 +1,5 @@
 name: Nightly build
-'on':
+"on":
   schedule:
     - cron: 00 0 * * *
   push:
@@ -13,11 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main 
+          ref: main
       - name: Use Node.js v20
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
           cache: npm
       - run: npm ci
       - run: npm run build --if-present -- --token ${{ secrets.GITHUB_TOKEN }}
@@ -35,8 +35,8 @@ jobs:
         id: new_release
         uses: ncipollo/release-action@v1
         with:
-          tag: '${{ steps.read_file.outputs.contents }}'
-          name: 'Release nightly_${{ steps.read_file.outputs.contents }}alpha'
+          tag: "${{ steps.read_file.outputs.contents }}"
+          name: "Release nightly_${{ steps.read_file.outputs.contents }}alpha"
           body: |
             A untested nightly release
             - For testing
