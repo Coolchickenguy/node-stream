@@ -1,5 +1,5 @@
 {
-  "name": "stream",
+  "name": "stream-browser",
   "version": "1.0.0",
   "description": "A the stream module from node",
   "main": "index.js",
