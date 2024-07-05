@@ -57,8 +57,7 @@ finishedPromise.then(async () => {
       }
     }
   }
-  console.log(readdirSync("./temp"),readdirSync("./temp").map(v => join("./temp",v)),readdirSync("./temp").map(v => join("./temp",v)).filter(v => statSync(v).isDirectory)[0])
-  renameSync(readdirSync("./temp").map(v => join("./temp",v)).filter(v => statSync(v).isDirectory)[0])
+  renameSync(readdirSync("./temp").map(v => join("./temp",v)).filter(v => statSync(v).isDirectory)[0],"./temp/node-main")
   // Create patches
   for(var path of glob.readDir("./patches")){
     if(!existsSync(dirname(join("./temp/node-main/lib/internal",path)))){
