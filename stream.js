@@ -25,15 +25,9 @@ globalThis.Proxy = new Proxy(Proxy, {
 // Intercept promise decleratons
 globalThis.Promise = new oldProxy(Promise,{
     construct(prom,args){
-        return new oldProxy(new prom(...args),{
-            get(_target,prop){
-                if (prop == getPromiseDetailsSymbol) {
-                    return args;
-                } else {
-                    return Reflect.get(...arguments);
-                }
-            }
-        })
+        var newPromise = new prom(...args);
+        newPromise[getPromiseDetailsSymbol] = args;
+        return newPromise;
     }
 });
 // And thus ends my evil sceme of ruining global objects for my own nefarious purposes 
