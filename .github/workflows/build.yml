@@ -26,12 +26,17 @@ jobs:
         run: mkdir out
       - name: Pack
         run: npm pack --pack-destination out
+      - name: Get version name
+        id: get_v
+        uses: satya-500/read-file-github-action@v1
+        with:
+          path: "version.txt"
       - name: Create a release
         id: new_release
         uses: ncipollo/release-action@v1
         with:
-          tag: 'Nightly${{ github.run_number }}'
-          release_name: 'Release nightly_${{ github.run_number }}alpha'
+          tag: '${{ steps.read_file.outputs.contents }}'
+          name: 'Release nightly_${{ steps.read_file.outputs.contents }}alpha'
           body: |
             A untested nightly release
             - For testing
