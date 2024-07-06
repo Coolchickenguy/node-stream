@@ -38,7 +38,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: "${{ steps.getv.outputs.content }}"
-          name: "Release nightly_${{ steps.getv.outputs.contents }}alpha"
+          name: "Release nightly #${{ github.run_number }}"
           body: |
             A untested nightly release
             - For testing
