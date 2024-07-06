@@ -18,6 +18,7 @@ function isPromise(value) {
 }
 const kCustomPromisifiedSymbol = SymbolFor('nodejs.util.promisify.custom');
 const kCustomPromisifyArgsSymbol = Symbol('customPromisifyArgs');
+const kEmptyObject = ObjectFreeze({ __proto__: null });
 
 let validateFunction;
 
@@ -105,4 +106,15 @@ const colorRegExp = /\u001b\[\d\d?m/g;
 function removeColors(str) {
   return StringPrototypeReplace(str, colorRegExp, '');
 }
-module.exports = { promisify, kEnumerableProperty, customInspectSymbol, isError, join, removeColors,};
+function once(callback, { preserveReturnValue = false } = kEmptyObject) {
+  let called = false;
+  let returnValue;
+  return function(...args) {
+    if (called) return returnValue;
+    called = true;
+    const result = ReflectApply(callback, this, args);
+    returnValue = preserveReturnValue ? result : undefined;
+    return result;
+  };
+}
+module.exports = { promisify, kEnumerableProperty, customInspectSymbol, isError, join, removeColors, once};
