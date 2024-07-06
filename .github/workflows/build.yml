@@ -37,13 +37,14 @@ jobs:
         env:
           run_number: ${{ github.run_number }}
           attempt_number: ${{ github.run_attempt }}
+        id: getid
         run: |
-           echo "total_run_number=$(($run_number+$attempt_number))" >> "$GITHUB_ENV"
+           echo "total_run_number=$(($run_number+$attempt_number))" >> "$GITHUB_OUTPUT"
       - name: Create a release
         id: new_release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.getv.outputs.content }}build${{ total_run_number }}"
+          tag: "${{ steps.getv.outputs.content }}build${{ steps.getid.outputs.content }}"
           name: "Release nightly #${{ github.run_number }}"
           body: |
             A untested nightly release
