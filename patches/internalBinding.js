@@ -32,7 +32,7 @@ var bindings = {
   }
 };
 // Lasy-load to avoid circular dependency
-Object.defineProperty(bindings,"DOMException",{get(){return require("./per_context/domexception.js")}});
+Object.defineProperty(bindings,"messaging",{get(){return { DOMException : require("./per_context/domexception.js")}}});
 const fauxproxy = new Proxy({},{get(){return fauxproxy}})
 module.exports = function internalBinding(id) {
   // Get a fake internal binding
