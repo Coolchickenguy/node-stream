@@ -117,4 +117,4 @@ function once(callback, { preserveReturnValue = false } = kEmptyObject) {
     return result;
   };
 }
-module.exports = { promisify, kEnumerableProperty, customInspectSymbol, isError, join, removeColors, once};
+module.exports = { promisify, kEnumerableProperty, customInspectSymbol, isError, join, removeColors, once, kEmptyObject};
