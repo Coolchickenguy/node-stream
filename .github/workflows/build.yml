@@ -43,5 +43,4 @@ jobs:
             A untested nightly release
             - For testing
           prerelease: true
-          skipIfReleaseExists: true
           artifacts: "out/*"
