@@ -1,3 +1,5 @@
+// Old browsers shim
+require("setimmediate");
 // Mess with Proxys and Promises to make them compadable with utils and types
 const {getProxyDetailsSymbol, getPromiseDetailsSymbol} = require("./bundle/internal/patchSymbols.js");
 const process = require("./bundle/internal/process.js");

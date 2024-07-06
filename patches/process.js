@@ -1,2 +1,3 @@
-const setImmediate = require("setimmediate");
-module.exports = { stdout: "chicken", stderr: "dance", nextTick: setImmediate, platform: "linix", env: {} };
+// Shim
+require("queue-microtask");
+module.exports = { stdout: "chicken", stderr: "dance", nextTick: queueMicrotask, platform: "linix", env: {} };
