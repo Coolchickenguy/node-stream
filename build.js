@@ -57,6 +57,7 @@ finishedPromise.then(async () => {
       }
     }
   }
+  await reader.close();
   renameSync(readdirSync("./temp").map(v => join("./temp",v)).filter(v => statSync(v).isDirectory)[0],"./temp/node-main")
   // Create patches
   for(var path of glob.readDir("./patches")){
