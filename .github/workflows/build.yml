@@ -32,21 +32,31 @@ jobs:
           path: ./version.txt
       - name: Echo version name
         run: echo "${{ steps.getv.outputs.content }}"
+      - name: Get version data
+        id: getdat
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./data.json
       - name: Get releace id
         id: release
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
-          out=$(node -e 'var parsed = JSON.parse("${{ vars.RUN_NUMBERS }}"); var ver = "${{steps.getv.outputs.content}}"; if(typeof parsed[ver] == "undefined"){parsed[ver] = 0} parsed[ver]++; process.stdout.write(parsed[ver] + "|" + JSON.stringify(parsed));')
+          out=$(node -e 'var parsed = JSON.parse("${{ steps.getdat.outputs.content }}"); var ver = "${{steps.getv.outputs.content}}"; if(typeof parsed[ver] == "undefined"){parsed[ver] = 0} parsed[ver]++; process.stdout.write(parsed[ver] + "|" + JSON.stringify(parsed));')
           IFS='|' read -ra split <<< "$out"
-          gh variable set RUN_NUMBERS --body ${split[1]}
+          echo "runNumbers=${split[1]}" >> $GITHUB_OUTPUT
           echo "version=${split[0]}" >> $GITHUB_OUTPUT
+      - name: Write version data to data.json
+        uses: jaywcjlove/github-action-modify-file-content@main
+        with:
+          branch: nightly-build
+          path: data.json
+          body: "${{ steps.release.outputs.runNumbers }}"
+          overwrite: 'true'
       - name: Create a release
         id: new_release
         uses: ncipollo/release-action@v1
         with:
           tag: "${{ steps.getv.outputs.content }}build${{ steps.release.outputs.version }}"
-          name: "Release nightly #${{ github.run_number }}"
+          name: "Release nightly #${{ steps.release.outputs.version }}"
           body: |
             A untested nightly release
             - For testing
