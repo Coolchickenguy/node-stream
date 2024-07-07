@@ -36,7 +36,7 @@ jobs:
       - name: Get releace id
         id: release
         run: |
-          out=$(node -e 'var parsed = JSON.parse("${{ vars.RUN_NUMBERS }}"); var ver = "${{steps.getv.outputs.content}}"; if(typof parsed[ver] == "undefined"){parsed[ver] = 0} parsed[ver]++; process.stdout.write(parsed[ver] + "|" + JSON.stringify(parsed));')
+          out=$(node -e 'var parsed = JSON.parse("${{ vars.RUN_NUMBERS }}"); var ver = "${{steps.getv.outputs.content}}"; if(typeof parsed[ver] == "undefined"){parsed[ver] = 0} parsed[ver]++; process.stdout.write(parsed[ver] + "|" + JSON.stringify(parsed));')
           IFS='|' read -ra split <<< "$out"
           gh variable set RUN_NUMBERS --body ${out[1]}
           echo "version=${out[0]}" >> $GITHUB_OUTPUT
