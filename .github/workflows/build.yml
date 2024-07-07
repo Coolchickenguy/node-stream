@@ -32,15 +32,12 @@ jobs:
           path: ./version.txt
       - name: Echo version name
         run: echo "${{ steps.getv.outputs.content }}"
-      - name: Checkout data
-        uses: actions/checkout@v4
-        with:
-         path: data
       - name: Get version data
         id: getdat
-        uses: juliangruber/read-file-action@v1
+        uses: jaywcjlove/github-action-read-file@main
         with:
-          path: data/data.json
+          branch: nightly-build
+          path: data.json
       - name: Get releace id
         id: release
         run: |
