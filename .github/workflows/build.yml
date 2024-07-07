@@ -33,27 +33,18 @@ jobs:
           path: ./version.txt
       - name: Echo version name
         run: echo "${{ steps.getv.outputs.content }}"
-      - name: Add version to RUN_NUMBERS if non-exsistent
-        env:
-          version: steps.getv.outputs.content
+      - name: Get releace id
+        id: release
         run: |
-            if [[ $RUN_NUMBERS != *"$version"* ]]; then
-            echo "RUN_NUMBERS=${version}:0" >> "$GITHUB_ENV"
-            fi
-      - name: Bump version
-        run: |
-          out=$(node -e 'process.stdout.write("${{env.RUN_NUMBERS}}".split("\n").map(v => {var sp = v.split(":"); return sp[0] == "${{steps.getv.outputs.content}}" ? [sp[0],sp[1] + 1].join(":") : v;}).join("\n"))')
-          echo "RUN_NUMBERS=${out}" >> $GITHUB_ENV
-      - name: Get version
-        id: ver
-        run: |
-          version=$((grep v20 <<< $RUN_NUMBERS) | cut -d ":" -f2-)
-          echo "version=${version}" >> $GITHUB_OUTPUT
+          out=$(node -e 'var parsed = JSON.parse("${{ vars.RUN_NUMBERS }}"); var ver = "${{steps.getv.outputs.content}}"; if(typof parsed[ver] == "undefined"){parsed[ver] = 0} parsed[ver]++; process.stdout.write(parsed[ver] + "|" + JSON.stringify(parsed));')
+          IFS='|' read -ra split <<< "$out"
+          gh variable set RUN_NUMBERS --body ${out[1]}
+          echo "version=${out[0]}" >> $GITHUB_OUTPUT
       - name: Create a release
         id: new_release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.getv.outputs.content }}build${{ steps.ver.outputs.version }}"
+          tag: "${{ steps.getv.outputs.content }}build${{ steps.release.outputs.version }}"
           name: "Release nightly #${{ github.run_number }}"
           body: |
             A untested nightly release
