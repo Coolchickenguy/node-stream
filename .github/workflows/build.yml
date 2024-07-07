@@ -38,8 +38,8 @@ jobs:
         run: |
           out=$(node -e 'var parsed = JSON.parse("${{ vars.RUN_NUMBERS }}"); var ver = "${{steps.getv.outputs.content}}"; if(typeof parsed[ver] == "undefined"){parsed[ver] = 0} parsed[ver]++; process.stdout.write(parsed[ver] + "|" + JSON.stringify(parsed));')
           IFS='|' read -ra split <<< "$out"
-          gh variable set RUN_NUMBERS --body ${out[1]}
-          echo "version=${out[0]}" >> $GITHUB_OUTPUT
+          gh variable set RUN_NUMBERS --body ${split[1]}
+          echo "version=${split[0]}" >> $GITHUB_OUTPUT
       - name: Create a release
         id: new_release
         uses: ncipollo/release-action@v1
