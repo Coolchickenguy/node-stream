@@ -56,7 +56,7 @@ jobs:
           path: data.json
           body: "${{ steps.release.outputs.runNumbers }}"
           overwrite: 'true'
-          message: 'Release: update data.json'
+          #message: 'Release: update data.json'
       - name: Create a release
         id: new_release
         uses: ncipollo/release-action@v1
