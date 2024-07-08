@@ -36,4 +36,4 @@ globalThis.Promise = new oldProxy(Promise,{
 // of stealing parameters from them!! HAHAHAHAHA!! 🙄 (jk) 
 // ( It's probably harmless-ish, it requires you to use a symbol to get to the params)
 var debug = require("./bundle/internal/util/debuglog.js");
-debug.initializeDebugEnv("*");
+debug.initializeDebugEnv("");
