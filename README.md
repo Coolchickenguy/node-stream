@@ -1,5 +1,5 @@
 # Stream browser
-The stream module from nodejs v20.14.4, created as a polyfill for browsers.
+The stream module from nodejs <!--VER-->v20.14.4<!--VER-END-->, created as a polyfill for browsers.
 ( Also includes EventEmitter because stream uses it )
 # How to use on nodejs
 > ###### Possibly as a polyfill for old nodejs versions?
