@@ -23,8 +23,6 @@ jobs:
       - run: npm test --if-present
       - name: Create out dir
         run: mkdir out
-      - name: Pack
-        run: npm pack --pack-destination out
       - name: Get version name
         id: getv
         uses: juliangruber/read-file-action@v1
@@ -32,6 +30,15 @@ jobs:
           path: ./version.txt
       - name: Echo version name
         run: echo "${{ steps.getv.outputs.content }}"
+      - name: Modify README.md - set version
+        uses: jaywcjlove/github-action-modify-file-content@main
+        with:
+          path: README.md
+          body: "${{ steps.getv.outputs.content }}"
+          openDelimiter: "<!--VER-->"
+          closeDelimiter: "<!--VER-END-->"
+      - name: Pack
+        run: npm pack --pack-destination out
       - name: Get version data
         id: getdat
         uses: jaywcjlove/github-action-read-file@main
