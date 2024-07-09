@@ -2,9 +2,9 @@ name: Nightly build
 "on":
   schedule:
     - cron: '00 0 * * *'
-  push:
-    branches:
-      - nightly-build
+#  push:
+#    branches:
+#      - nightly-build
 jobs:
   build:
     runs-on: ubuntu-latest
