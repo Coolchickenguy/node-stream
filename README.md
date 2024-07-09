@@ -14,7 +14,7 @@ import promises from "stream-browser/promises";
 # How to use with webpack
 Include in your config file:
 #### Commonjs
-```json
+```
 {
   resolve: {
     fallback: {
@@ -25,7 +25,7 @@ Include in your config file:
 }
 ```
 #### Esm
-```json
+```
 {
   resolve: {
     fallback: {
