@@ -14,8 +14,8 @@ import promises from "stream-browser/promises";
 # How to use with webpack
 Include in your config file:
 #### Commonjs
-```
-{
+```javascript
+module.exports = {
   resolve: {
     fallback: {
       stream: require.resolve("stream-browser"),
@@ -25,8 +25,8 @@ Include in your config file:
 }
 ```
 #### Esm
-```
-{
+```javascript
+export default {
   resolve: {
     fallback: {
       stream: import.meta.resolve("stream-browser"),
