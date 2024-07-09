@@ -38,9 +38,8 @@ jobs:
 #          openDelimiter: "<!--VER-->"
 #          closeDelimiter: "<!--VER-END-->"
       - name: Modify README.md - set version
-        env:
-          newVal: ${{ steps.getv.outputs.content }}
         run: |
+          newVal='${{ steps.getv.outputs.content }}'
           node -e "const fs = require('fs');const pathTo = './README.md';const delimiters = ['<!--VER-->','<!--VER-END-->'];const replacer = new RegExp(`(?<=${delimiters[0]})(.|\n)*(?=${delimiters[1]})`,'gm');const old = fs.readFileSync(pathTo);fs.writeFileSync(pathTo,old.replace(replacer,${newVal}))"
       - name: Pack
         run: npm pack --pack-destination out
