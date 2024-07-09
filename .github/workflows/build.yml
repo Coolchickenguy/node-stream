@@ -30,13 +30,18 @@ jobs:
           path: ./version.txt
       - name: Echo version name
         run: echo "${{ steps.getv.outputs.content }}"
+#      - name: Modify README.md - set version
+#        uses: jaywcjlove/github-action-modify-file-content@main
+#        with:
+#          path: README.md
+#          body: "${{ steps.getv.outputs.content }}"
+#          openDelimiter: "<!--VER-->"
+#          closeDelimiter: "<!--VER-END-->"
       - name: Modify README.md - set version
-        uses: jaywcjlove/github-action-modify-file-content@main
-        with:
-          path: README.md
-          body: "${{ steps.getv.outputs.content }}"
-          openDelimiter: "<!--VER-->"
-          closeDelimiter: "<!--VER-END-->"
+        env:
+          newVal: ${{ steps.getv.outputs.content }}
+        run: |
+          node -e "const fs = require('fs');const pathTo = './README.md';const delimiters = ['<!--VER-->','<!--VER-END-->'];const replacer = new RegExp(`(?<=${delimiters[0]})(.|\n)*(?=${delimiters[1]})`,'gm');const old = fs.readFileSync(pathTo);fs.writeFileSync(pathTo,old.replace(replacer,${newVal}))"
       - name: Pack
         run: npm pack --pack-destination out
       - name: Get version data
