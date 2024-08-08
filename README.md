@@ -26,11 +26,19 @@ module.exports = {
 ```
 #### Esm
 ```javascript
+import { fileURLToPath } from "url";
+/**
+ * Resolve a module
+ * @param {string} specifier 
+ */
+function resolve(specifier){
+  return fileURLToPath(import.meta.resolve(specifier));
+}
 export default {
   resolve: {
     fallback: {
-      stream: import.meta.resolve("stream-browser"),
-      events: import.meta.resolve("stream-browser/extras/events")
+      stream: resolve("stream-browser"),
+      events: resolve("stream-browser/extras/events")
     }
   }
 }
