@@ -156,12 +156,14 @@ finishedPromise.then (async () => {
             }
           )
           .replace(
-            /(?<=require\('|")(timers|events|(stream\/.*))(?='|"\))/gm,
+            /(?<=require\('|")(timers|events|stream|(stream\/.+))(?='|"\))/gm,
             (match) =>
               match == "events"
                 ? getLoc("events.js", filePath)
                 : match == "timers"
                 ? getLoc("internal/timers.js", filePath)
+                : match === "stream" || match === "stream/"
+                ? getLoc("stream.js", filePath)
                 : getLoc(match, filePath)
           )
     );
