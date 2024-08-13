@@ -22,7 +22,7 @@ const yauzl = require("yauzl-promise"),
   pathGlobs = require("./files.json");
 
 // Get token
-/*const token = process.argv[process.argv.findIndex(v => v == "--token" || v == "-T") + 1];
+const token = process.argv[process.argv.findIndex(v => v == "--token" || v == "-T") + 1];
 // Get url of latest nodejs version
 axios({
 url:"https://api.github.com/repos/nodejs/node/releases",
@@ -40,7 +40,7 @@ var finishedPromise = axios({
   method: "GET",
   responseType: "stream",
 }).then(res => {res.data.pipe(zipStream); return finished(zipStream);});
-finishedPromise.then*/ (async () => {
+finishedPromise.then (async () => {
   // File created
   const reader = await yauzl.open("./temp/nodejs.zip"),
     matcher = picomatch(pathGlobs);
@@ -171,7 +171,6 @@ finishedPromise.then*/ (async () => {
   mkdirp(bundlePath);
   cpSync("./", bundlePath, { recursive: true });
   process.chdir(dirname(bundlePath));
-  //rmSync("./temp",{recursive:true});
-  rmSync("./temp/node-main", { recursive: true });
-})();
-//});
+  rmSync("./temp",{recursive:true});
+});
+});
