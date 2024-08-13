@@ -13,7 +13,7 @@ const yauzl = require("yauzl-promise"),
     statSync,
   } = require("fs"),
   stream = require("stream"),
-  { join, relative,dirname } = require("path"),
+  { join, relative, dirname, resolve } = require("path"),
   { promisify } = require("util"),
   finished = promisify(stream.finished),
   glob = require("./glob.js"),
@@ -22,7 +22,7 @@ const yauzl = require("yauzl-promise"),
   pathGlobs = require("./files.json");
 
 // Get token
-const token = process.argv[process.argv.findIndex(v => v == "--token" || v == "-T") + 1];
+/*const token = process.argv[process.argv.findIndex(v => v == "--token" || v == "-T") + 1];
 // Get url of latest nodejs version
 axios({
 url:"https://api.github.com/repos/nodejs/node/releases",
@@ -40,7 +40,7 @@ var finishedPromise = axios({
   method: "GET",
   responseType: "stream",
 }).then(res => {res.data.pipe(zipStream); return finished(zipStream);});
-finishedPromise.then(async () => {
+finishedPromise.then*/ (async () => {
   // File created
   const reader = await yauzl.open("./temp/nodejs.zip"),
     matcher = picomatch(pathGlobs);
@@ -50,7 +50,7 @@ finishedPromise.then(async () => {
       if (file.filename.endsWith("/")) {
         await mkdirp(join("./temp", file.filename));
       } else {
-        await mkdirp(join("./temp",dirname(file.filename)));
+        await mkdirp(join("./temp", dirname(file.filename)));
         const inStream = await file.openReadStream(),
           outStream = createWriteStream(join("./temp", file.filename));
         await stream.promises.pipeline(inStream, outStream);
@@ -58,37 +58,120 @@ finishedPromise.then(async () => {
     }
   }
   await reader.close();
-  renameSync(readdirSync("./temp").map(v => join("./temp",v)).filter(v => statSync(v).isDirectory)[0],"./temp/node-main")
+  renameSync(
+    readdirSync("./temp")
+      .map((v) => join("./temp", v))
+      .filter((v) => statSync(v).isDirectory)[0],
+    "./temp/node-main"
+  );
   // Create patches
-  for(var path of glob.readDir("./patches")){
-    if(!existsSync(dirname(join("./temp/node-main/lib/internal",path)))){
-        await mkdirp(dirname(join("./temp/node-main/lib/internal",path)));
+  for (var path of glob.match(["**/!(*.old)"],"./patches")) {
+    if (!existsSync(dirname(join("./temp/node-main/lib/internal", path)))) {
+      await mkdirp(dirname(join("./temp/node-main/lib/internal", path)));
     }
-    writeFileSync(join("./temp/node-main/lib/internal",path),readFileSync(join("./patches",path)));
+    writeFileSync(
+      join("./temp/node-main/lib/internal", path),
+      readFileSync(join("./patches", path))
+    );
   }
- /* writeFileSync("./temp/node-main/lib/internal/util.js",readFileSync("./utilPatch.js"));
+  /* writeFileSync("./temp/node-main/lib/internal/util.js",readFileSync("./utilPatch.js"));
   // Create patched validators
   writeFileSync("./temp/node-main/lib/internal/validators.js",readFileSync("./validators.js"));*/
   // Goto folder
-  process.chdir(join("temp","node-main","lib"));
+  process.chdir(join("temp", "node-main", "lib"));
   console.log(process.cwd());
   console.log("Patching primordails");
-  const patches = ["var primordials = {};","globalThis.internalBinding = require(\"../internalBinding.js\"); module.exports = primordials;"];
-  writeFileSync("./internal/per_context/primordials.js",[patches[0] + readFileSync("./internal/per_context/primordials.js") + patches[1]].join("\n"));
-  console.log("Includeing primordials in all files and prossess")
-  var files = glob.match(["{*.!(*js),internal/per_context/primordials.js,internal/process.js,internal/internalBinding.js,internal/bindings/**,internal/patchSymbols.js}"], "../../../temp", 2,true);
-  const getLoc = (absolutePath,filePath) => ((filePath.includes("/") ? relative(dirname(filePath),absolutePath) : `./${absolutePath}`)).replace(/(?<!\.\/)(?<![A-z\/\.])(?=[A-z])/,"./");
+  const patches = [
+    "var primordials = {};",
+    "module.exports = primordials;",
+  ];
+  writeFileSync(
+    "./internal/per_context/primordials.js",
+    [
+      patches[0] +
+        readFileSync("./internal/per_context/primordials.js") +
+        patches[1],
+    ].join("\n")
+  );
+  console.log(
+    "Includeing primordials, process, and internalBinding in all files"
+  );
+  var files = glob.match(
+    [
+      "internal/bindings/**",
+      "internal/patchSymbols.js",
+      "internal/process.js",
+      "internal/per_context/primordials.js",
+    ],
+    "../../../temp",
+    2,
+    true
+  );
+  const getLoc = (absolutePath, filePath) =>
+    (filePath.includes("/")
+      ? relative(dirname(filePath), absolutePath)
+      : `./${absolutePath}`
+    ).replace(/(?<!\.\/)(?<![A-z\/\.])(?=[A-z])/, "./");
+  const makeRequire = (
+    fromFilePath,
+    pathOfFileToRequire,
+    whatToNameTheVarable
+  ) =>
+    resolve(pathOfFileToRequire) === resolve(fromFilePath)
+      ? ""
+      : `var ${whatToNameTheVarable} = require("${getLoc(
+          pathOfFileToRequire,
+          fromFilePath
+        )}");\n`;
   for (const filePath of files) {
-    var primordailsLocation = getLoc("internal/per_context/primordials.js",filePath);
-    var processLocation = getLoc("internal/process.js",filePath);
-   console.log(`On path ${filePath}, primordials is at ${primordailsLocation} and process is at ${processLocation}`);
-   writeFileSync(filePath,`//Patch\n//BOCK\nvar primordials = require("${primordailsLocation}");var process = require("${processLocation}");` + readFileSync(filePath).toString().replace(/(?<=require\(")internal\/[^"]*(?="\))|(?<=require\(')internal\/[^']*(?='\))/g,(match) => {var out = (filePath.includes("/") ? relative(dirname(filePath),match) : match);out = out == "" ? relative(dirname(filePath),match + ".js") : out;return out.replace(/(?<!\.\/)(?<![A-z\/\.\-])(?=[A-z])/,"./")}).replace(/(?<=require\('|")(timers|events|(stream\/.*))(?='|"\))/gm,(match) => match == "events" ? getLoc("events.js",filePath) : match == "timers" ? getLoc("internal/timers.js",filePath) : getLoc(match,filePath)));
+    var primordialsRequireStatment = makeRequire(
+      filePath,
+      "internal/per_context/primordials.js",
+      "primordials"
+    );
+    var internalBindingRequireStatment = makeRequire(
+      filePath,
+      "internal/internalBinding.js",
+      "internalBinding"
+    );
+    var processRequireStatment = makeRequire(
+      filePath,
+      "internal/process.js",
+      "process"
+    );
+    writeFileSync(
+      filePath,
+      `//Patch\n//BOCK\n${primordialsRequireStatment}${internalBindingRequireStatment}${processRequireStatment}` +
+        readFileSync(filePath)
+          .toString()
+          .replace(
+            /(?<=require\(")internal\/[^"]*(?="\))|(?<=require\(')internal\/[^']*(?='\))/g,
+            (match) => {
+              var out = filePath.includes("/")
+                ? relative(dirname(filePath), match)
+                : match;
+              out =
+                out == "" ? relative(dirname(filePath), match + ".js") : out;
+              return out.replace(/(?<!\.\/)(?<![A-z\/\.\-])(?=[A-z])/, "./");
+            }
+          )
+          .replace(
+            /(?<=require\('|")(timers|events|(stream\/.*))(?='|"\))/gm,
+            (match) =>
+              match == "events"
+                ? getLoc("events.js", filePath)
+                : match == "timers"
+                ? getLoc("internal/timers.js", filePath)
+                : getLoc(match, filePath)
+          )
+    );
   }
   console.log(files);
   const bundlePath = "../../../bundle";
   mkdirp(bundlePath);
-  cpSync("./", bundlePath, {recursive: true});
+  cpSync("./", bundlePath, { recursive: true });
   process.chdir(dirname(bundlePath));
-  rmSync("./temp",{recursive:true});
-});
-});
+  //rmSync("./temp",{recursive:true});
+  rmSync("./temp/node-main", { recursive: true });
+})();
+//});

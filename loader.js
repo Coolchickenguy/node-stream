@@ -10,16 +10,13 @@ const oldProxy = Proxy;
 globalThis.Proxy = new Proxy(Proxy, {
     construct(target, args) {
         var newProx = new target(new target(...args), {
-            get(prox, prop) {
-                if (prop == getProxyDetailsSymbol) {
+            get(_prox, prop) {
+                if (prop === getProxyDetailsSymbol) {
                     return args;
                 } else {
                     return Reflect.get(...arguments);
                 }
             },
-            set() {
-                return Reflect.set(...arguments);
-            }
         });
         return newProx;
     }
@@ -36,4 +33,7 @@ globalThis.Promise = new oldProxy(Promise,{
 // of stealing parameters from them!! HAHAHAHAHA!! 🙄 (jk) 
 // ( It's probably harmless-ish, it requires you to use a symbol to get to the params)
 var debug = require("./bundle/internal/util/debuglog.js");
-debug.initializeDebugEnv("");
+var internalBinding = require("./bundle/internal/internalBinding.js");
+debug.initializeDebugEnv("*");
+// Tell internal binding that debug has started
+internalBinding("internal_fJ31hrh")();

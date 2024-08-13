@@ -24,7 +24,7 @@ function getAllEntries(obj) {
  */
 function getPropsChainSafe(object, ...props) {
   var ref = object;
-  while (typeof ref != undefined && typeof ref[props[0]] != "undefined") {
+  while (typeof ref != "undefined" && typeof ref[props[0]] != "undefined") {
     ref = ref[props.shift()];
   }
   return props.length == 0 ? ref : undefined;
@@ -58,7 +58,8 @@ const isBooleanObject = vISt(Boolean);
 const isNumberObject = vISt(Number);
 const isStringObject = vISt(String);
 // This Matches nodejs
-// Hope they fix this
+// Is nodejs MADE of bugs?
+// (No)
 const isSymbolObject = vISt(Symbol);
 const isNativeError = vISt(Error);
 const isRegExp = vISt(RegExp);
@@ -82,11 +83,12 @@ if(typeof SharedArrayBuffer){
 }
 const isSharedArrayBuffer = vISt(SharedArrayBuffer);
 const isProxy = (val) =>
-  typeof getPropsChainSafe(val, getProxyDetailsSymbol) !== undefined;
+  typeof getPropsChainSafe(val, getProxyDetailsSymbol) !== "undefined";
 const isModuleNamespaceObject = (val) =>
   getPropsChainSafe(val, Symbol.toStringTag) === "Module";
 const isAnyArrayBuffer = vISt(ArrayBuffer, SharedArrayBuffer);
 const isBoxedPrimitive = vISt(Number, String, Boolean, BigInt, Symbol);
+const isFunction = vISt(Function);
 module.exports = {
   isEntirelyNative,
   isDate,
@@ -115,21 +117,10 @@ module.exports = {
   isModuleNamespaceObject,
   isAnyArrayBuffer,
   isBoxedPrimitive,
+  isFunction,
   local:{
   getAllEntries,
   getPropsChainSafe,
-  vISt
-  }
+  vISt,
+  },
 };
-var h = new Proxy(new Set(),{
-get(t,p,r){
-    if(!myWeakSet[p] || true){
-        return t[p];
-    }
-    return myWeakSet[p];
-},
-set(t,p,nv,r){
-    myWeakSet[p] = nv;
-    return true;
-}
-})
