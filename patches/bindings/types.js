@@ -83,7 +83,7 @@ const isProxy = (val) =>
   typeof getPropsChainSafe(val, getProxyDetailsSymbol) !== "undefined";
 const isModuleNamespaceObject = (val) =>
   getPropsChainSafe(val, Symbol.toStringTag) === "Module";
-const isAnyArrayBuffer = vISt(ArrayBuffer, ...(SharedArrayBuffer ? [SharedArrayBuffer] : []));
+const isAnyArrayBuffer = vISt(ArrayBuffer, ...(typeof SharedArrayBuffer === "undefined" ? [] : [SharedArrayBuffer]));
 const isBoxedPrimitive = vISt(Number, String, Boolean, BigInt, Symbol);
 const isFunction = vISt(Function);
 module.exports = {

@@ -77,7 +77,6 @@ var bindings = {
   },
   options: optionsDump,
   string_decoder,
-  icu:require("./bindings/icu.js"),
   worker,
   buffer,
   config:{
