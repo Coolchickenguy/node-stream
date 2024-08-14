@@ -1,5 +1,3 @@
-// Old browsers shim
-require("setimmediate");
 // Put this first so primordials don't get a non-patched version of proxy or promise
 // Mess with Proxys and Promises to make them compadable with utils and types
 const {

@@ -1,5 +1,3 @@
-// Shim
-require("queue-microtask");
 const { process } = require("./meta.js");
 module.exports = {
   ...process,
