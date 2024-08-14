@@ -1,4 +1,7 @@
-const { ObjectPrototypeToString } = typeof primordials == "undefined" ? {ObjectPrototypeToString:Object.prototype.toString} : primordials;
+const { ObjectPrototypeToString } =
+  typeof primordials == "undefined"
+    ? { ObjectPrototypeToString: Object.prototype.toString }
+    : primordials;
 const { getProxyDetailsSymbol } = require("../patchSymbols.js");
 const AsyncFunction = async function () {}.constructor;
 const GeneratorFunction = function* () {}.constructor;
@@ -34,12 +37,10 @@ function getPropsChainSafe(object, ...props) {
  * @param { any[] } types
  * @returns { Function } A instanceof checker
  */
-const vISt =
-  (...types) =>{
-    types.filter(v => typeof v != "undefined");
-  return (val) =>
-    types.map((t) => val instanceof t).includes(true);
-  }
+const vISt = (...types) => {
+  types.filter((v) => typeof v != "undefined");
+  return (val) => types.map((t) => val instanceof t).includes(true);
+};
 const isEntirelyNative = (value) =>
   !getAllEntries(value)
     .map(([key, val]) =>
@@ -48,9 +49,12 @@ const isEntirelyNative = (value) =>
         : undefined
     )
     .includes(false);
+const SAB =
+  typeof SharedArrayBuffer === "undefined" ? undefined : SharedArrayBuffer;
 // TODO: add isExernal, whatever THAT checks for
 const isDate = vISt(Date);
-const isArgumentsObject = (value) => ObjectPrototypeToString(value) === "[object Arguments]";
+const isArgumentsObject = (value) =>
+  ObjectPrototypeToString(value) === "[object Arguments]";
 // TODO: posibly use primordials?
 // Same check as nodejs
 const isBigIntObject = vISt(BigInt);
@@ -78,12 +82,12 @@ const isWeakMap = vISt(WeakMap);
 const isWeakSet = vISt(WeakSet);
 const isArrayBuffer = vISt(ArrayBuffer);
 const isDataView = vISt(DataView);
-const isSharedArrayBuffer = vISt(SharedArrayBuffer);
+const isSharedArrayBuffer = vISt(SAB);
 const isProxy = (val) =>
   typeof getPropsChainSafe(val, getProxyDetailsSymbol) !== "undefined";
 const isModuleNamespaceObject = (val) =>
   getPropsChainSafe(val, Symbol.toStringTag) === "Module";
-const isAnyArrayBuffer = vISt(ArrayBuffer, ...(typeof SharedArrayBuffer === "undefined" ? [] : [SharedArrayBuffer]));
+const isAnyArrayBuffer = vISt(ArrayBuffer, SAB);
 const isBoxedPrimitive = vISt(Number, String, Boolean, BigInt, Symbol);
 const isFunction = vISt(Function);
 module.exports = {
@@ -115,9 +119,9 @@ module.exports = {
   isAnyArrayBuffer,
   isBoxedPrimitive,
   isFunction,
-  local:{
-  getAllEntries,
-  getPropsChainSafe,
-  vISt,
+  local: {
+    getAllEntries,
+    getPropsChainSafe,
+    vISt,
   },
 };
