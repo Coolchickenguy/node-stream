@@ -1,6 +1,6 @@
 # Stream browser
 The stream module from nodejs <!--VER-->v20.14.4<!--VER-END-->, created as a polyfill for browsers.
-( Also includes EventEmitter because stream uses it )
+( Also includes EventEmitter because stream uses it and a fs noop )
 ###### Notes: requires a buffer polyfill to be in use and does NOT support webstreams
 # How to use on nodejs
 > ###### Possibly as a polyfill for old nodejs versions?

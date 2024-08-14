@@ -1,5 +1,4 @@
 const { SafeMap } = primordials;
-const punycode = require("punycode/");
 // For debug logging
 var quote = [];
 var loaded = false;
@@ -85,7 +84,7 @@ var bindings = {
     isDebugBuild: false,
     hasOpenSSL: false,
     fipsMode: false,
-    hasIntl: true,
+    hasIntl: false,
     hasTracing: true,
     hasNodeOptions: true,
     hasInspector: false,
