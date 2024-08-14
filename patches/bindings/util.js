@@ -80,7 +80,7 @@ const parseEnv = function parseEnv(input) {
 
   while (content.length > 0) {
     // Skip empty lines and comments
-    if (content[0] === "\n" || /^ *#/m.test(content[0])) {
+    if (/^ *(#|\n)/m.test(content[0])) {
       const newline = content.indexOf("\n");
       if (newline !== -1) {
         content = content.slice(newline + 1);
