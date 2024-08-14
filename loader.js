@@ -61,7 +61,8 @@ module.exports = function bootstrap(debugOptions) {
     });
     process.on("warning", warning.onWarning);
     var debug = require("./bundle/internal/util/debuglog.js");
-    debug.initializeDebugEnv(debugOptions === undefined ? "" : debugOptions);
+    process.env.NODE_DEBUG = debugOptions === undefined ? "" : debugOptions;
+    debug.initializeDebugEnv(process.env.NODE_DEBUG);
     // Tell internal binding that debug has started
     internalBinding("internal_fJ31hrh")();
     _process = process;
